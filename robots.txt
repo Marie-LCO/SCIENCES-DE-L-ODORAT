@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marie-lco.github.io/SCIENCES-DE-L-ODORAT/sitemap.xml
