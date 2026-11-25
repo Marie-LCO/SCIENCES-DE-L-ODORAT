@@ -512,7 +512,7 @@ footer li a, footer .contact-line { display: inline-block; padding: 6px 0; min-h
         <p class="lead">Décrivez votre besoin en quelques mots. Nous revenons vers vous par e-mail avec une proposition.</p>
       </div>
       <form class="form-card" id="form-devis" name="devis-entreprise" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="Sciences de l\'odorat : devis-entreprise">
+        <input type="hidden" name="_subject" value="Sciences de l'odorat : devis-entreprise">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <p hidden><label>Ne pas remplir : <input name="_honey" tabindex="-1" autocomplete="off"></label></p>
@@ -672,12 +672,20 @@ footer li a, footer .contact-line { display: inline-block; padding: 6px 0; min-h
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(Object.fromEntries(new FormData(form)))
       }).then(function (r) {
-        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          if (!r.ok || String(d.success) !== 'true') {
+            var e = new Error(d.message || ('http ' + r.status));
+            e.detail = d.message || '';
+            throw e;
+          }
+        });
+      }).then(function () {
         btn.hidden = true;
         ok.hidden = false;
-      }).catch(function () {
+      }).catch(function (e) {
+        if (window.console) console.error('Formulaire :', e);
         btn.disabled = false;
-        err.textContent = "L'envoi n'a pas abouti. Merci de réessayer dans un instant ou de nous écrire directement.";
+        err.textContent = (e && e.detail ? e.detail + ' ' : '') + "L'envoi n'a pas abouti. Merci de réessayer dans un instant ou d'écrire à sciencesdelodorat@gmail.com.";
       });
     });
   }
