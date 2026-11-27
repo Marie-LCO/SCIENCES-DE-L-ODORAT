@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://marie-lco.github.io/SCIENCES-DE-L-ODORAT/sitemap.xml
+Sitemap: https://sciencesdelodorat.fr/sitemap.xml
